@@ -1,0 +1,8 @@
+[
+  {
+    "changeType": "column_rename",
+    "oldName": "FUEL_TYPE",
+    "newName": "Fuel_Type",
+    "timestamp": "2026-01-27T01:10:04.137685+00:00"
+  }
+]

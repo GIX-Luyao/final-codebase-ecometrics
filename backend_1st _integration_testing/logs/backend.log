@@ -1,0 +1,47 @@
+[2026-01-26 15:52:39] [INFO] EcoMetrics backend initialized
+[2026-01-26 15:52:39] [INFO] EcoMetrics backend initialized
+[2026-01-26 15:54:05] [INFO] EcoMetrics backend initialized
+[2026-01-26 15:54:32] [INFO] EcoMetrics backend initialized
+[2026-01-26 15:54:33] [INFO] [no-session] LOAD - SUCCESS - Loaded FleetFuel_Raw.csv (7 rows)
+[2026-01-26 15:55:13] [INFO] [sess_9d3489f9] EDIT - RECEIVED - Column rename: FUEL_TYPE -> Fuel_Type
+[2026-01-26 15:55:13] [INFO] [sess_9d3489f9] VALIDATE - SUCCESS - 1 change(s) validated
+[2026-01-26 15:55:13] [INFO] [sess_9d3489f9] SAVE - SUCCESS - Data saved to data/sessions/sess_9d3489f9/fleetfuel_modified.csv
+[2026-01-26 15:55:23] [INFO] [sess_9d3489f9] CALC - START - Running calculation pipeline
+[2026-01-26 15:55:23] [ERROR] [sess_9d3489f9] CALC - FAILED - 'Subtype'
+[2026-01-26 15:56:07] [INFO] [sess_9d3489f9] CALC - START - Running calculation pipeline
+[2026-01-26 15:56:07] [ERROR] [sess_9d3489f9] CALC - FAILED - 'Subtype'
+[2026-01-26 15:59:00] [INFO] EcoMetrics backend initialized
+[2026-01-26 15:59:03] [INFO] [sess_9d3489f9] CALC - START - Running calculation pipeline
+[2026-01-26 15:59:03] [INFO] [sess_9d3489f9] CALC - COMPLETE - 21 records, total mtCO2e: 2.28537
+[2026-01-26 15:59:23] [INFO] [sess_b5f8b27b] EDIT - RECEIVED - Column rename: YEAR -> 123
+[2026-01-26 15:59:23] [ERROR] [sess_b5f8b27b] VALIDATE - FAILED - Change 0: Column name '123' is invalid: cannot be a pure number
+[2026-01-26 15:59:37] [INFO] [no-session] LOAD - SUCCESS - Loaded FleetFuel_Invalid.csv (4 rows)
+[2026-01-26 17:01:23] [INFO] EcoMetrics backend initialized
+[2026-01-26 17:01:23] [INFO] EcoMetrics backend initialized
+[2026-01-26 17:08:35] [INFO] EcoMetrics backend initialized
+[2026-01-26 17:08:36] [INFO] EcoMetrics backend initialized
+[2026-01-26 17:09:12] [INFO] [no-session] LOAD - SUCCESS - Loaded FleetFuel_Raw.csv (7 rows)
+[2026-01-26 17:09:32] [ERROR] [no-session] LOAD - FAILED - Missing 'type' parameter
+[2026-01-26 17:10:04] [INFO] [sess_321749fe] EDIT - RECEIVED - Column rename: FUEL_TYPE -> Fuel_Type
+[2026-01-26 17:10:04] [INFO] [sess_321749fe] VALIDATE - SUCCESS - 1 change(s) validated
+[2026-01-26 17:10:04] [INFO] [sess_321749fe] SAVE - SUCCESS - Data saved to data/sessions/sess_321749fe/fleetfuel_modified.csv
+[2026-01-26 17:10:44] [INFO] [sess_abc12345] CALC - START - Running calculation pipeline
+[2026-01-26 17:10:44] [INFO] [sess_abc12345] CALC - COMPLETE - 21 records, total mtCO2e: 2.28537
+[2026-01-27 21:24:11] [INFO] EcoMetrics backend initialized
+[2026-01-27 21:24:11] [INFO] EcoMetrics backend initialized
+[2026-01-27 21:25:12] [INFO] [sess_ae8d8508] EDIT - RECEIVED - Column rename: MODEL -> MODEL_NAME
+[2026-01-27 21:25:12] [INFO] [sess_ae8d8508] VALIDATE - SUCCESS - 1 change(s) validated
+[2026-01-27 21:25:12] [INFO] [sess_ae8d8508] SAVE - SUCCESS - Data saved to data/sessions/sess_ae8d8508/fleetfuel_modified.csv
+[2026-01-27 21:26:46] [INFO] [sess_ae8d8508] EDIT - RECEIVED - Column rename: MANUFACTURER -> 123
+[2026-01-27 21:26:46] [ERROR] [sess_ae8d8508] VALIDATE - FAILED - Change 0: Column name '123' is invalid: cannot be a pure number
+[2026-01-27 21:46:10] [INFO] EcoMetrics backend initialized
+[2026-01-27 21:46:10] [INFO] EcoMetrics backend initialized
+[2026-01-27 21:46:34] [INFO] [sess_2050ba88] EDIT - RECEIVED - Column rename: MODEL -> MODEL_NAME
+[2026-01-27 21:46:34] [INFO] [sess_2050ba88] VALIDATE - SUCCESS - 1 change(s) validated
+[2026-01-27 21:46:34] [INFO] [sess_2050ba88] SAVE - SUCCESS - Data saved to data/sessions/sess_2050ba88/fleetfuel_modified.csv
+[2026-01-27 21:47:46] [INFO] [sess_2050ba88] EDIT - RECEIVED - Column rename: YEAR -> 123
+[2026-01-27 21:47:46] [ERROR] [sess_2050ba88] VALIDATE - FAILED - Change 0: Column name '123' is invalid: cannot be a pure number
+[2026-02-05 13:32:13] [INFO] EcoMetrics backend initialized
+[2026-02-05 13:32:13] [INFO] EcoMetrics backend initialized
+[2026-02-05 13:45:54] [INFO] [sess_3ba631f4] EDIT - RECEIVED - Column rename: YEAR -> 123
+[2026-02-05 13:45:54] [ERROR] [sess_3ba631f4] VALIDATE - FAILED - Change 0: Column name '123' is invalid: cannot be a pure number
