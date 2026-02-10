@@ -29,12 +29,14 @@ def make_error_response(code: str, message: str, details: dict = None, status_co
 
 @sources_bp.route("/sources", methods=["GET"])
 def list_sources():
-    """List all available source files."""
+    """List all available source files (consumption and reference)."""
     try:
-        sources = StorageService.list_source_files()
+        consumption = StorageService.list_source_files()
+        reference = StorageService.list_reference_files()
         return jsonify({
             "success": True,
-            "sources": sources
+            "sources": consumption,
+            "reference": reference
         })
     except Exception as e:
         return make_error_response("STORAGE_ERROR", str(e), status_code=500)

@@ -38,6 +38,9 @@ class StorageService:
             return sources
 
         for file_path in consumption_dir.iterdir():
+            # Skip temp files (e.g. ~$filename.xlsx)
+            if file_path.name.startswith("~$"):
+                continue
             if file_path.suffix.lower() in Config.SUPPORTED_EXTENSIONS:
                 source_id = file_path.stem.lower().replace(" ", "_").replace("-", "_")
                 file_stat = file_path.stat()
@@ -65,16 +68,59 @@ class StorageService:
         return sources
 
     @staticmethod
+    def list_reference_files() -> list[dict]:
+        """List all available reference files in REFERENCE directory."""
+        sources = []
+        reference_dir = Config.REFERENCE_DIR
+
+        if not reference_dir.exists():
+            return sources
+
+        for file_path in reference_dir.iterdir():
+            if file_path.name.startswith("~$"):
+                continue
+            if file_path.suffix.lower() in Config.SUPPORTED_EXTENSIONS:
+                source_id = "ref_" + file_path.stem.lower().replace(" ", "_").replace("-", "_")
+                file_stat = file_path.stat()
+
+                source_info = {
+                    "sourceId": source_id,
+                    "name": file_path.stem,
+                    "filePath": str(file_path.relative_to(Config.BASE_DIR)),
+                    "fileSize": file_stat.st_size,
+                    "lastModified": datetime.fromtimestamp(file_stat.st_mtime).isoformat() + "Z",
+                }
+
+                if file_path.suffix.lower() in [".xlsx", ".xls"]:
+                    try:
+                        xl = pd.ExcelFile(file_path)
+                        source_info["sheets"] = xl.sheet_names
+                    except Exception:
+                        source_info["sheets"] = []
+                else:
+                    source_info["sheets"] = None
+
+                sources.append(source_info)
+
+        return sources
+
+    @staticmethod
     def get_source_path(source_id: str) -> Optional[Path]:
         """Get the file path for a source ID."""
-        consumption_dir = Config.CONSUMPTION_DIR
+        # Check if it's a reference file (prefixed with ref_)
+        if source_id.startswith("ref_"):
+            search_id = source_id[4:]  # strip "ref_" prefix
+            search_dir = Config.REFERENCE_DIR
+        else:
+            search_id = source_id
+            search_dir = Config.CONSUMPTION_DIR
 
-        if not consumption_dir.exists():
+        if not search_dir.exists():
             return None
 
-        for file_path in consumption_dir.iterdir():
+        for file_path in search_dir.iterdir():
             file_source_id = file_path.stem.lower().replace(" ", "_").replace("-", "_")
-            if file_source_id == source_id and file_path.suffix.lower() in Config.SUPPORTED_EXTENSIONS:
+            if file_source_id == search_id and file_path.suffix.lower() in Config.SUPPORTED_EXTENSIONS:
                 return file_path
 
         return None
@@ -88,7 +134,7 @@ class StorageService:
             raise FileNotFoundError(f"Source not found: {source_id}")
 
         if file_path.suffix.lower() in [".xlsx", ".xls"]:
-            df = pd.read_excel(file_path, sheet_name=sheet_name)
+            df = pd.read_excel(file_path, sheet_name=sheet_name if sheet_name else 0)
         elif file_path.suffix.lower() == ".csv":
             df = pd.read_csv(file_path)
         else:
@@ -116,7 +162,7 @@ class StorageService:
             raise FileNotFoundError(f"Reference table not found: {file_path}")
 
         if file_path.suffix.lower() in [".xlsx", ".xls"]:
-            df = pd.read_excel(file_path, sheet_name=sheet_name)
+            df = pd.read_excel(file_path, sheet_name=sheet_name if sheet_name else 0)
         else:
             df = pd.read_csv(file_path)
 
@@ -135,7 +181,7 @@ class StorageService:
             raise FileNotFoundError(f"Reference table not found: {file_path}")
 
         if path.suffix.lower() in [".xlsx", ".xls"]:
-            df = pd.read_excel(path, sheet_name=sheet_name)
+            df = pd.read_excel(path, sheet_name=sheet_name if sheet_name else 0)
         else:
             df = pd.read_csv(path)
 

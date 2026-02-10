@@ -292,8 +292,16 @@ class MappingEngine:
         if not group_cols:
             return df
 
+        df_agg = df.copy()
+        # Convert any non-hashable column values (lists, dicts) to strings for groupby
+        for col in group_cols:
+            if df_agg[col].dtype == object:
+                df_agg[col] = df_agg[col].apply(
+                    lambda x: str(x) if isinstance(x, (list, dict)) else x
+                )
+
         # Group and sum consumption
-        df_aggregated = df.groupby(group_cols, as_index=False, dropna=False)["Consumption"].sum()
+        df_aggregated = df_agg.groupby(group_cols, as_index=False, dropna=False)["Consumption"].sum()
 
         return df_aggregated
 
