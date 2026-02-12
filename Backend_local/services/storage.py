@@ -389,7 +389,7 @@ class StorageService:
 
     @staticmethod
     def save_calculated_data(session_id: str, source_id: str, df: pd.DataFrame) -> str:
-        """Save calculated emissions data to Parquet file."""
+        """Save calculated emissions data to CSV file."""
         calculated_dir = Config.get_calculated_dir(session_id)
         calculated_dir.mkdir(parents=True, exist_ok=True)
 
@@ -398,20 +398,20 @@ class StorageService:
         if "formulaReference" in df_save.columns:
             df_save = df_save.drop(columns=["formulaReference"])
 
-        file_path = calculated_dir / f"{source_id}_emissions.parquet"
-        df_save.to_parquet(file_path, index=False)
+        file_path = calculated_dir / f"{source_id}_emissions.csv"
+        df_save.to_csv(file_path, index=False)
 
         return str(file_path.relative_to(Config.BASE_DIR))
 
     @staticmethod
     def load_calculated_data(session_id: str, source_id: str) -> Optional[pd.DataFrame]:
-        """Load calculated emissions data from Parquet file."""
-        file_path = Config.get_calculated_dir(session_id) / f"{source_id}_emissions.parquet"
+        """Load calculated emissions data from CSV file."""
+        file_path = Config.get_calculated_dir(session_id) / f"{source_id}_emissions.csv"
 
         if not file_path.exists():
             return None
 
-        return pd.read_parquet(file_path)
+        return pd.read_csv(file_path)
 
     @staticmethod
     def load_all_calculated_data(session_id: str) -> pd.DataFrame:
@@ -422,8 +422,8 @@ class StorageService:
             return pd.DataFrame()
 
         dfs = []
-        for file_path in calculated_dir.glob("*_emissions.parquet"):
-            df = pd.read_parquet(file_path)
+        for file_path in calculated_dir.glob("*_emissions.csv"):
+            df = pd.read_csv(file_path)
             df["_source"] = file_path.stem.replace("_emissions", "")
             dfs.append(df)
 
