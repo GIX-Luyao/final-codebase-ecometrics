@@ -1,85 +1,134 @@
-# Data Flow Application
+# EcoMetrics Frontend — Cloud Version
 
-这是一个基于 React 和 Tailwind CSS 的数据流管理界面，根据 Figma 设计实现。
+This folder (`Frontend_cloud/`) is the AWS-ready version of the React frontend.
+The original local version lives in `Frontend_E2E/` and is left completely untouched.
 
-## 功能特性
+---
 
-- **数据上传**：支持本地上传和 SharePoint 文件夹上传
-- **数据暂存区**：显示已上传文件列表，包含文件名、类型、标签和日期
-- **工作流步骤**：清晰的进度指示器（上传 → 清洗 → 处理 → 可视化）
-- **文件管理**：支持查看和管理上传的文件
+## What Changed from `Frontend_E2E/`
 
-## 安装
+### Modified Files
 
-1. 安装依赖：
+| File | What Changed |
+|------|-------------|
+| `src/services/api.js` | Line 2: API base URL now reads from `REACT_APP_API_URL` env var (falls back to `localhost:8000` for local dev); added `uploadFile(file, folder)` function |
+| `src/Input.jsx` | Imports `uploadFile`; `reader.onload` is now `async`; calls `uploadFile()` after local file parse — sends file to backend and attaches returned `sourceId` to the file object in state |
+
+### New Files
+
+| File | Purpose |
+|------|---------|
+| `.env.production` | Sets `REACT_APP_API_URL` to the ALB URL at build time. **Must be updated before running `npm run build` for deployment.** |
+
+### Files Identical to `Frontend_E2E/` (not changed)
+
+`App.jsx`, `DataCleaning.jsx`, `DataMapping.jsx`, `Dashboard.jsx`, all other components, `package.json`, `tailwind.config.js`, `postcss.config.js`, `public/`
+
+---
+
+## How the File Upload Flow Works
+
+**Before (local version)**: `Input.jsx` parses the file client-side (using the `xlsx` library) and stores it in React state only. The backend never received the file — it just listed files already placed in `data/raw/CONSUMPTION/` on the server.
+
+**After (cloud version)**: `Input.jsx` still parses the file client-side for immediate local preview. Additionally, after the user confirms the upload modal, the raw file is also sent to the backend via `POST /api/files/upload`, which saves it to S3. The backend returns a `sourceId` that is attached to the file object in state — this is what downstream pages (`DataMapping`, `DataCleaning`, `Dashboard`) use when calling backend API endpoints.
+
+```
+User picks file → modal confirms name + folder tag
+  → FileReader parses locally (for immediate UI preview)
+  → uploadFile(file, folder) sends to backend → saved to S3
+  → sourceId attached to file object in state
+  → downstream pages use sourceId for API calls (previewSource, saveSourceConfig, runCalculation)
+```
+
+The **"Import from SharePoint"** button is preserved — in cloud mode it calls `listSources()` which lists files already in the S3 raw bucket. Useful for reusing previously uploaded files without re-uploading.
+
+---
+
+## API Functions (`src/services/api.js`)
+
+All existing functions are unchanged. One new function was added:
+
+### `uploadFile(file, folder)`
+```javascript
+// Uploads a browser File object to the backend.
+// folder: "CONSUMPTION" or "REFERENCE"
+// Returns: { sourceId, name, fileName, folder, sheets }
+await uploadFile(selectedFile, 'CONSUMPTION')
+```
+
+The `folder` value maps to the tag the user selects in the upload modal:
+- `#Consumption` tag → `"CONSUMPTION"`
+- `#Reference` tag → `"REFERENCE"`
+
+---
+
+## Environment Variables
+
+### `.env.production` — **Update before each cloud build**
+
+```
+REACT_APP_API_URL=http://<ALB_DNS_NAME>/api
+```
+
+Replace `<ALB_DNS_NAME>` with the actual ALB DNS name from AWS (e.g. `ecometrics-alb-123456789.us-west-2.elb.amazonaws.com`).
+
+This value is **baked into the static build** at build time — it is not read at runtime. If the ALB URL changes, you must rebuild.
+
+### `.env.development` (optional, for local development against local backend)
+
+Create this file if needed:
+```
+REACT_APP_API_URL=http://localhost:8000/api
+```
+
+If this file doesn't exist, `api.js` falls back to `http://localhost:8000/api` automatically.
+
+---
+
+## Building for Production
+
+**Step 1**: Update `.env.production` with the correct ALB DNS name.
+
+**Step 2**: Build:
 ```bash
+cd Frontend_cloud
+npm install       # only needed once, or after dependency changes
+npm run build     # outputs to build/
+```
+
+**Step 3**: Upload to S3:
+```bash
+aws s3 sync build/ s3://ecometrics-frontend-<your-suffix>/ --delete
+```
+
+**Step 4**: Invalidate CloudFront cache so users get the new version immediately:
+```bash
+aws cloudfront create-invalidation \
+  --distribution-id <DISTRIBUTION_ID> \
+  --paths "/*"
+```
+
+---
+
+## What AWS Expects
+
+| Resource | Purpose |
+|----------|---------|
+| S3 bucket (`ecometrics-frontend-...`) | Stores the static `build/` output |
+| CloudFront distribution | Serves the React app over HTTPS with CDN |
+| CloudFront Origin Access Control (OAC) | Allows CloudFront to read from the private S3 bucket |
+| Custom error pages (403 → `/index.html`, 404 → `/index.html`) | Required so React Router page refreshes don't 404 |
+
+---
+
+## Running Locally (for development)
+
+No setup changes needed — `api.js` falls back to `localhost:8000`:
+
+```bash
+cd Frontend_cloud
 npm install
+npm start        # runs on http://localhost:3000
 ```
 
-## 运行
-
-启动开发服务器：
-```bash
-npm start
-```
-
-应用将在 [http://localhost:3000](http://localhost:3000) 打开。
-
-## 构建
-
-创建生产版本：
-```bash
-npm run build
-```
-
-构建文件将生成在 `build` 文件夹中。
-
-## 技术栈
-
-- **React 18**: UI 框架
-- **Tailwind CSS 3**: 样式框架
-- **React Scripts**: 构建工具
-
-## 项目结构
-
-```
-1st demo/
-├── public/
-│   └── index.html          # HTML 模板
-├── src/
-│   ├── Input.jsx           # 主组件
-│   ├── index.js            # 入口文件
-│   └── index.css           # 全局样式
-├── package.json            # 项目配置
-├── tailwind.config.js      # Tailwind 配置
-└── postcss.config.js       # PostCSS 配置
-```
-
-## 组件说明
-
-### Input 组件
-主要的数据上传和管理界面，包含：
-- 顶部导航栏
-- 工具栏
-- 进度步骤指示器
-- 上传卡片（本地/SharePoint）
-- 数据暂存区表格
-- 上传完成按钮
-
-## 自定义
-
-### 修改颜色
-在 [tailwind.config.js](tailwind.config.js) 中扩展主题配置。
-
-### 添加新功能
-编辑 [src/Input.jsx](src/Input.jsx) 文件来添加新的功能和交互。
-
-## 注意事项
-
-- 确保已安装 Node.js (推荐 v14 或更高版本)
-- 图标使用内联 SVG 实现，无需额外的图标库
-- 示例数据在组件中硬编码，实际使用时需要连接后端 API
-
-## License
-
-MIT
+Make sure `Backend_cloud` (or `Backend_local`) is also running on port 8000.

@@ -14,8 +14,8 @@ class Config:
     STORAGE_BACKEND = os.getenv("STORAGE_BACKEND", "s3")  # "local" | "s3"
 
     # --- S3 configuration (only used when STORAGE_BACKEND=s3) ---
-    S3_RAW_BUCKET = os.getenv("S3_RAW_BUCKET", "")         # e.g. ecometrics-raw-data
-    S3_DATA_BUCKET = os.getenv("S3_DATA_BUCKET", "")       # e.g. ecometrics-processed-data
+    S3_RAW_BUCKET = os.getenv("S3_RAW_BUCKET", "spu-emissions-raw-data")
+    S3_DATA_BUCKET = os.getenv("S3_DATA_BUCKET", "spu-emissions-processed-data")
     AWS_REGION = os.getenv("AWS_DEFAULT_REGION", "us-west-2")
 
     # S3 key prefixes
@@ -70,7 +70,7 @@ class Config:
     @classmethod
     def is_s3_mode(cls) -> bool:
         """Return True when running in S3/cloud mode."""
-        return cls.STORAGE_BACKEND == "s3"
+        return cls.STORAGE_BACKEND.lower() == "s3"
 
     @classmethod
     def ensure_directories(cls):
