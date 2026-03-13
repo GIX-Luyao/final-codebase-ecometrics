@@ -239,3 +239,4 @@ Full request/response examples are in [`docs/FRONTEND_API_GUIDE.md`](docs/FRONTE
 
 - Backend module documentation: [`docs/BACKEND_MODULES.md`](docs/BACKEND_MODULES.md)
 - Data source schemas: [`docs/data_source_schemas.md`](docs/data_source_schemas.md)
+
