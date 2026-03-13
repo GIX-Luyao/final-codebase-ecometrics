@@ -1,0 +1,5 @@
+EQ_EQUIP_NO,YEAR,MANUFACTURER,MODEL,Vehicle Class,QTY_FUEL,FTK_DATE
+1011,2018,Ford,F-150,Light,invalid_number,2021-10-30
+,2019,Kenworth,T680,Heavy,45.2,not-a-date
+1013,twenty-seventeen,Chevrolet,Express,Light,18.3,2021-11-15
+1014,2020,Freightliner,M2,,52.7,

@@ -1,0 +1,11 @@
+# EcoMetrics Backend - Cloud Deployment Dependencies
+Flask==3.0.0
+flask-cors==4.0.0
+pandas==2.1.4
+numpy==1.26.3
+openpyxl==3.1.2
+pyarrow==14.0.1
+python-dateutil==2.8.2
+pytest==7.4.3
+boto3==1.34.0
+gunicorn==21.2.0

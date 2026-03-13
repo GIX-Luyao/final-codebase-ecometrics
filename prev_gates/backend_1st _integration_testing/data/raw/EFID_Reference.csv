@@ -1,0 +1,10 @@
+EF_ID,GHG_MTperUnit,Unit,Group,Subtype,Year,GHG,GWP,Sector,Activity,Description,Scope,Label
+Fuel_Gasoline_20XX_CO2,0.008887,gal,Fuel,Gasoline,2021,CO2,1,Fleet,Mobile Combustion,Gasoline CO2 emissions,Scope 1,Fleet Gasoline
+Fuel_Gasoline_20XX_CH4,0.000000205183,gal,Fuel,Gasoline,2021,CH4,28,Fleet,Mobile Combustion,Gasoline CH4 emissions,Scope 1,Fleet Gasoline
+Fuel_Gasoline_20XX_N2O,0.000000850583,gal,Fuel,Gasoline,2021,N2O,265,Fleet,Mobile Combustion,Gasoline N2O emissions,Scope 1,Fleet Gasoline
+Fuel_B20_20XX_CO2,0.008211,gal,Fuel,B20,2021,CO2,1,Fleet,Mobile Combustion,B20 CO2 emissions,Scope 1,Fleet B20
+Fuel_B20_20XX_CH4,0.000000205183,gal,Fuel,B20,2021,CH4,28,Fleet,Mobile Combustion,B20 CH4 emissions,Scope 1,Fleet B20
+Fuel_B20_20XX_N2O,0.000000850583,gal,Fuel,B20,2021,N2O,265,Fleet,Mobile Combustion,B20 N2O emissions,Scope 1,Fleet B20
+Fuel_Diesel_20XX_CO2,0.01018,gal,Fuel,Diesel,2022,CO2,1,Fleet,Mobile Combustion,Diesel CO2 emissions,Scope 1,Fleet Diesel
+Fuel_Diesel_20XX_CH4,0.000000205183,gal,Fuel,Diesel,2022,CH4,28,Fleet,Mobile Combustion,Diesel CH4 emissions,Scope 1,Fleet Diesel
+Fuel_Diesel_20XX_N2O,0.000000850583,gal,Fuel,Diesel,2022,N2O,265,Fleet,Mobile Combustion,Diesel N2O emissions,Scope 1,Fleet Diesel

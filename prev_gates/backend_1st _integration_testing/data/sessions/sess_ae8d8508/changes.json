@@ -1,0 +1,8 @@
+[
+  {
+    "changeType": "column_rename",
+    "oldName": "MODEL",
+    "newName": "MODEL_NAME",
+    "timestamp": "2026-01-28T05:25:12.904544+00:00"
+  }
+]
